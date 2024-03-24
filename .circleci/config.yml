@@ -1,0 +1,20 @@
+version: 2.1
+
+orbs:
+  node: cloudify/public-unittest-orb@1 #orb version
+
+checkout:
+  post:
+    - >
+      if [ -n "$CI_PULL_REQUEST" ]; then
+        PR_ID=${CI_PULL_REQUEST##*/}
+        git fetch origin +refs/pull/$PR_ID/merge:
+        git checkout -qf FETCH_HEAD
+      fi
+
+workflows:
+  version: 2
+  tests:
+    jobs:
+      - node/check_py3_compat_job
+      - node/unittests_job

@@ -1,0 +1,74 @@
+plugins:
+  git:
+    executor: central_deployment_agent
+    package_name: 'cloudify-git-plugin'
+    package_version: '0.1'
+
+data_types:
+
+  cloudify.types.git.Credentials:
+    properties:
+      git_user:
+        description: git username.
+        type: string
+        default: ''
+        required: true
+      git_password:
+        description: git password.
+        type: string
+        default: ''
+      git_keypair:
+        description: git keypair.
+        type: string
+        default: ''
+
+  cloudify.types.git.Repository.config:
+    properties:
+      repo_path:
+        description: a local path for the repo to be interacted with.
+        type: string
+        default: ''
+        required: true
+      repo_url:
+        description: a url that points to the location of the repository to handle.
+        type: string
+        default: ''
+        required: true
+      commit_id:
+        description: a commit id that will be used while handling repo.
+        type: string
+        default: ''
+        required: false
+
+dsl_definitions:
+
+  credentials_config: &credentials_config
+    credentials_config:
+      type: cloudify.types.git.Credentials
+      description: Your git credentials configuration.
+      required: true
+
+node_types:
+
+  cloudify.nodes.git.Repository:
+    derived_from: cloudify.nodes.Root
+    properties:
+      <<: *credentials_config
+      resource_config:
+        description: >
+          Reposity Config that you want Cloudify to handle lifecycle for.
+        type: cloudify.types.git.Repository.config
+        required: true
+      use_external_resource:
+        description: |
+          Indicate whether the resource exists or if Cloudify should create the
+          resource, true if you are bringing an existing resource, false if you
+          want cloudify to create it.
+        type: boolean
+        default: False
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        create:
+          implementation: git.cloudify_git.tasks.init_repo
+        configure:
+          implementation: git.cloudify_git.tasks.clone_repo

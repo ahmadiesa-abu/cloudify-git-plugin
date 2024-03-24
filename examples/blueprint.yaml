@@ -1,0 +1,28 @@
+tosca_definitions_version: cloudify_dsl_1_4
+
+imports:
+  - cloudify/types/types.yaml
+  # you import you plugin after building the wagon
+  # and uploading it to the manager
+  - plugin:cloudify-git-plugin
+
+dsl_definitions:
+
+  credentials_config: &credentials_config
+    git_user: 'ahmadiesa_abu'
+    git_password: {get_secret: github_token}
+
+  repo_config: &repo_config
+    repo_path: ''
+    repo_url: 'https://github.com/ahmadiesa-abu/generic-blueprints.git'
+    commit_id: 'cca71f0f2a6525ef40a59671e990eef4de463358'
+
+
+node_templates:
+
+  my_sample_repo:
+    type: cloudify.nodes.git.Repository
+    properties:
+      credentials_config: *credentials_config
+      resource_config: *repo_config
+      use_external_resource: true
