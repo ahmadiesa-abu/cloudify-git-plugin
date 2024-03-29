@@ -10,12 +10,16 @@ dsl_definitions:
 
   credentials_config: &credentials_config
     git_user: 'ahmadiesa_abu'
-    git_password: {get_secret: github_token}
+    # git_password: {get_secret: github_token}
+    git_keypair: {get_secret: github_keypair}
 
   repo_config: &repo_config
     repo_path: ''
-    repo_url: 'https://github.com/ahmadiesa-abu/generic-blueprints.git'
-    commit_id: 'cca71f0f2a6525ef40a59671e990eef4de463358'
+    #repo_url: 'https://github.com/ahmadiesa-abu/github-demo.git'
+    repo_url: 'git@github.com:ahmadiesa-abu/github-demo.git'
+    branch_name: 'terraform'
+    commit_id: '7c0290d01a406ea789fcbefde21fc197b9d64e9b'
+    path_to_archive: ''
 
 
 node_templates:

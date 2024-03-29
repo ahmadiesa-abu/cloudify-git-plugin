@@ -34,6 +34,16 @@ data_types:
         type: string
         default: ''
         required: true
+      branch_name:
+        description: a repository bracnch to checkout when clonning.
+        type: string
+        default: ''
+        required: false
+      path_to_archive:
+        description: a path inside the cloned repoistory to be archived.
+        type: string
+        default: ''
+        required: false
       commit_id:
         description: a commit id that will be used while handling repo.
         type: string
@@ -56,7 +66,7 @@ node_types:
       <<: *credentials_config
       resource_config:
         description: >
-          Reposity Config that you want Cloudify to handle lifecycle for.
+          Repository Config that you want Cloudify to handle lifecycle for.
         type: cloudify.types.git.Repository.config
         required: true
       use_external_resource:
@@ -72,3 +82,7 @@ node_types:
           implementation: git.cloudify_git.tasks.init_repo
         configure:
           implementation: git.cloudify_git.tasks.clone_repo
+        start:
+          implementation: git.cloudify_git.tasks.show_repo
+        delete:
+          implementation: git.cloudify_git.tasks.delete_repo
